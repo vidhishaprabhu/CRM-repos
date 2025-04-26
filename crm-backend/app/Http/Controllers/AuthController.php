@@ -44,5 +44,13 @@ class AuthController extends Controller
         }
         return response()->json(['token'=>$user->createToken('api-token')->plainTextToken,'user'=>$user->load('roles')]);
     }
+    public function user(Request $request){
+        return $request->user()->load('roles');
+    }
+    public function logout(Request $request){
+        $request->user()->tokens()->delete();
+        return response()->json(['message'=>'User logged out successfully']);
+    }
+
 
 }
