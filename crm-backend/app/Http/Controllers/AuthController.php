@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -20,6 +22,14 @@ class AuthController extends Controller
             'password'=>bcrypt($request->password),
 
         ]);
+        if (Str::endsWith($user->email, '@admin.com')) {
+            $user->assignRole('Admin');
+        } elseif(Str::endsWith($user->email,'@sales.com')) {
+            $user->assignRole('Sales Manager');
+        }
+        elseif(Str::endsWith($user->email,'@support.com')){
+            $user->assignRole('Support');
+        }    
         return response()->json(['message'=>'User registered successfully','user'=>$user]);
     }
     public function login(Request $request){
@@ -28,12 +38,8 @@ class AuthController extends Controller
             'password'=>'required'
 
         ]);
-        $user=User::create([
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password),
-
-        ]);
-        if(!$user || Hash::check($request->password,$user->password)){
+        $user = User::where('email', $request->email)->first();
+        if(!$user || !Hash::check($request->password,$user->password)){
             throw ValidationException::withMessages(['email'=>['Invalid Credentials']]);
         }
         return response()->json(['token'=>$user->createToken('api-token')->plainTextToken,'user'=>$user->load('roles')]);
