@@ -1,5 +1,10 @@
 # crm-frontend
 
+# Images
+![Image](src/assets/back-image.jpg)
+
+
+
 ## Project setup
 ```
 npm install
