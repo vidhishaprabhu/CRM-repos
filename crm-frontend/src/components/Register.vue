@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card p-4 shadow-sm">
@@ -31,6 +31,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
             <p v-if="error" class="text-danger text-center mt-3">{{ error }}</p>
+            <p v-else-if="message" class="text-success mt-5">{{message}}</p>
           </form>
         </div>
       </div>
@@ -49,6 +50,7 @@ export default {
       email: '',
       password: '',
       error: '',
+      message:''
     }
   },
   methods: {
@@ -59,6 +61,9 @@ export default {
           email: this.email,
           password: this.password,
         });
+        this.error='';
+        this.message="Registration was Successfully done !!";
+        this.$router.push('/login');
 
       } catch (error) {
         this.error = 'Registration Failed !!. Please Try Again.'
