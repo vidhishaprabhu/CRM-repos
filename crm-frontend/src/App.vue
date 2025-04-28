@@ -11,6 +11,18 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/admin-dashboard">Admin</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/sales-dashboard">Sales</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/support-dashboard">Support</router-link>
+          </li>
+          <li class="nav-item">
+            <button @click="logout" class="btn btn-danger">Logout</button>
+          </li>
         </ul>
       </div>
     </div>
@@ -23,30 +35,33 @@
 
 
 <script>
+import api from './api';
 export default {
-  name: 'App', 
-  
-}
+  methods: {
+    async logout() {
+      try {
+        const token = localStorage.getItem('api-token');
+        if (!token) {
+          alert("No token found. Please log in again.");
+          return;
+        }
+        const response = await api.post('/logout', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        localStorage.removeItem('api-token');
+        alert("User logged out successfully");
+        this.$router.push('/login');
+      } catch (error) {
+        this.error = "Logout failed. Please try again.";
+      }
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.nav-link{
-  color: aliceblue;
-}
 
-
-
-body, html {
-  margin: 0;
-  padding: 0;
-  background: url('@/assets/back-image.jpg');
-}
 </style>
