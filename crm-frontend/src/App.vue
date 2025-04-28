@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-primary shadow-sm position-sticky top-0">
     <div class="container">
-      <router-link class="navbar-brand fw-bold bg-light" to="/">CRM Application</router-link>
+      <router-link class="navbar-brand fw-bold bg-light" to="/">CRM</router-link>
 
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
