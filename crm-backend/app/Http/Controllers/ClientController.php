@@ -26,4 +26,30 @@ class ClientController extends Controller
         $client=Client::created($validated);
         return response()->json(['message'=>'Client created successfully','client'=>$client]);
     }
+    public function show($id){
+        return Client::findOrFaile($id);
+    }
+    public function update(Request $request,$id){
+        $validated=Client::validate([
+            'company_name'=>'required|string',
+            'client_code'=>'required|string|unique:clients',
+            'conatact_person'=>'required|string',
+            'designation'=>'nullable|string',
+            'client_type'=>'nullable|string',
+            'industry'=>'nullable|string',
+            'business_size'=>'nullable|string',
+            'website'=>'nullable|string',
+            'tax_id'=>'nullable|string',
+            'logo_path'=>'nullable|string'
+        ]);
+        $client=Client::findOrFail($id);
+        $client->update($validated);
+        return response()->json(['message'=>'Client updated successfully','client'=>$client]);
+
+    }
+    public function deleteClient($id){
+        $client=Client::findOrFail($id);
+        $client->delete();
+        return response()->json(['message'=>'Client deleted successfully']);
+    }
 }
