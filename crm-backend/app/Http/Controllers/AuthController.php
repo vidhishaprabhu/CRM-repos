@@ -32,25 +32,55 @@ class AuthController extends Controller
         }    
         return response()->json(['message'=>'User registered successfully','user'=>$user]);
     }
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $request->validate([
-            'email'=>'required',
-            'password'=>'required'
-
+            'email' => 'required',
+            'password' => 'required'
         ]);
+
         $user = User::where('email', $request->email)->first();
-        if(!$user || !Hash::check($request->password,$user->password)){
-            throw ValidationException::withMessages(['email'=>['Invalid Credentials']]);
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages(['email' => ['Invalid Credentials']]);
         }
-        return response()->json(['token'=>$user->createToken('api-token')->plainTextToken,'user'=>$user->load('roles')]);
+
+        if (Str::endsWith($user->email, '@admin.com')) {
+            $user->assignRole('Admin');
+        } elseif (Str::endsWith($user->email, '@sales.com')) {
+            $user->assignRole('Sales Manager');
+        } elseif (Str::endsWith($user->email, '@support.com')) {
+            $user->assignRole('Support');
+        }
+        $role = $user->roles->first()->name ?? null;
+
+        return response()->json([
+            'token' => $user->createToken('api-token')->plainTextToken,
+            'role' => $role
+        ]);
     }
-    public function user(Request $request){
-        return $request->user()->load('roles');
+
+    public function getAllUsers(Request $request){
+        $user=User::with('roles')->get();
+        return response()->json($user);
     }
     public function logout(Request $request){
         $request->user()->tokens()->delete();
         return response()->json(['message'=>'User logged out successfully']);
     }
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update($request->only(['name', 'email']));
+        if ($request->has('role')) {
+            $user->syncRoles([$request->role]);
+        }
+        return response()->json(['message' => 'User Updated Successfully']);
+    }
 
-
+    public function delete($id){
+        $user=User::findorFail($id);
+        $user->delete();
+        return response()->json(['message'=>'User deleted successfully']);
+    }
 }
