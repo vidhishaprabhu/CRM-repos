@@ -1,6 +1,14 @@
 <template>
+    <p class="text-center mb-6 text-primary" v-if="loggedInUser">
+      Hello {{ loggedInUser.name }}
+    </p>
+    <h2 class="text-center mb-6 text-primary" v-if="loggedInUser">Welcome to {{loggedInUser.name}}!</h2>
+    <h2>Getting Started</h2>
+    <br>
   <div class="container" :style="backgroundStyle">
+    
     <h1 class="text-center mb-6 text-primary">List Of Registered Users</h1>
+
     <table class="table table-striped mt-4">
       <thead>
         <tr>
@@ -41,11 +49,11 @@
             <form @submit.prevent="updateUser">
               <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" v-model="editUserData.name" class="form-control" required>
+                <input type="text" id="name" v-model="editUserData.name" class="form-control" required />
               </div>
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" v-model="editUserData.email" class="form-control" required>
+                <input type="email" id="email" v-model="editUserData.email" class="form-control" required />
               </div>
               <button type="submit" class="btn btn-primary mt-3">Update</button>
             </form>
@@ -57,13 +65,14 @@
 </template>
 
 <script>
-import api from '../api';
+import api from '../api'; 
 import bgImage from '@/assets/back-image1.jpg';
 
 export default {
   data() {
     return {
       users: [],
+      loggedInUser: null, 
       error: '',
       isEditModalVisible: false,
       editUserData: {
@@ -86,6 +95,7 @@ export default {
   },
   mounted() {
     this.fetchUsers();
+    this.fetchLoggedInUser();
   },
   methods: {
     async fetchUsers() {
@@ -99,6 +109,20 @@ export default {
         this.users = response.data;
       } catch (error) {
         this.error = "There is an error in fetching the user data";
+      }
+    },
+
+    async fetchLoggedInUser() {
+      try {
+        const token = localStorage.getItem('api-token');
+        const response = await api.get('/user', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        this.loggedInUser = response.data;
+      } catch (error) {
+        this.error = "Failed to fetch logged-in user";
       }
     },
 
@@ -140,10 +164,7 @@ export default {
         const token = localStorage.getItem('api-token');
         const { id, name, email } = this.editUserData;
 
-        await api.put(`/users/${id}`, {
-          name,
-          email
-        }, {
+        await api.put(`/users/${id}`, { name, email }, {
           headers: {
             Authorization: `Bearer ${token}`
           }
