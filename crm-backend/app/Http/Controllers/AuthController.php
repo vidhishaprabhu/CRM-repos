@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Models\LoginLog;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -86,14 +89,49 @@ class AuthController extends Controller
         return response()->json(['message'=>'User deleted successfully']);
     }
 
-    public function getLoginChartData(){
-        $logindata=LoginLog::selectRaw('created_at as date,count(*) as count')
+    public function getLoginChartData()
+    {
+        $startDate = Carbon::now()->subDays(6); 
+        $endDate = Carbon::now();
+
+        $logins = LoginLog::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        ->whereBetween('created_at', [$startDate, $endDate])
         ->groupBy('date')
         ->orderBy('date')
-        ->get();
+        ->pluck('count', 'date');
+
+        $dateRange = new Collection();
+        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+        $formatted = $date->format('Y-m-d');
+        $dateRange->put($formatted, $logins->get($formatted, 0));
+        }
+
         return response()->json([
-            'sales'=>$logindata->pluck('date'),
-            'data'=>$logindata->pluck('count')
+            'labels' => $dateRange->keys(),
+            'data' => $dateRange->values()
+        ]);
+    }
+    public function getLoginChartAdminData(){
+        $role='Admin';
+        $startDate =CarBon::now()->subDays(6);
+        $endDate=Carbon::now();
+        $logins=LoginLog::selectRaw('created_at ad date,COUNT(*) as count')
+        ->whereBetween('created_at',[$startDate,$endDate])
+        ->whereHas('user.roles', function($query) use ($role){
+            $query->where('name',$role)
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('count','date');
+        });
+        $dateRange = new Collection();
+        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+        $formatted = $date->format('Y-m-d');
+        $dateRange->put($formatted, $logins->get($formatted, 0));
+        }
+
+        return response()->json([
+            'labels' => $dateRange->keys(),
+            'data' => $dateRange->values()
         ]);
     }
 }
