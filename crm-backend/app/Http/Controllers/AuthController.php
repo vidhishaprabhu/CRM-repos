@@ -85,4 +85,15 @@ class AuthController extends Controller
         $user->delete();
         return response()->json(['message'=>'User deleted successfully']);
     }
+
+    public function getSalesChartData(){
+        $sales=LoginLog::selectRaw('created_at as date,count(*) as count')
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+        return response()->json([
+            'sales'=>$sales->pluck('date'),
+            'data'=>$sales->pluck('count')
+        ]);
+    }
 }
