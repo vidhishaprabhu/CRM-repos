@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\LoginLog;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +21,6 @@ class AuthController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
-
         ]);
         if (Str::endsWith($user->email, '@admin.com')) {
             $user->assignRole('Admin');
@@ -52,6 +52,9 @@ class AuthController extends Controller
         } elseif (Str::endsWith($user->email, '@support.com')) {
             $user->assignRole('Support');
         }
+        LoginLog::create([
+            'user_id'=>$user->id,
+        ]);
         $role = $user->roles->first()->name ?? null;
 
         return response()->json([
@@ -59,7 +62,6 @@ class AuthController extends Controller
             'role' => $role
         ]);
     }
-
     public function getAllUsers(Request $request){
         $user=User::with('roles')->get();
         return response()->json($user);
