@@ -20,11 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
-
 Route::middleware('auth:sanctum')->group(function(){
+    Route::get('sales-chart',[AuthController::class,'getLoginChartData']);
     Route::get('/users',[AuthController::class,'getAllUsers']);
     Route::post('/logout',[AuthController::class,'logout']);
     Route::put('/users/{id}',[AuthController::class,'update']);
     Route::delete('/users/{id}',[AuthController::class,'delete']);
-    Route::get('login-chart',[AuthController::class,'getLoginChartData']);
+    
 });
