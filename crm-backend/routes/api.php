@@ -22,6 +22,7 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('sales-chart',[AuthController::class,'getLoginChartData']);
+    Route::get('admin-chart',[AuthController::class,'getLoginChartAdminData']);
     Route::get('/users',[AuthController::class,'getAllUsers']);
     Route::post('/logout',[AuthController::class,'logout']);
     Route::put('/users/{id}',[AuthController::class,'update']);
