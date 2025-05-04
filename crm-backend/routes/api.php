@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('sales-chart',[AuthController::class,'getLoginChartData']);
     Route::get('admin-chart',[AuthController::class,'getLoginChartAdminData']);
     Route::get('sales-manager-chart',[AuthController::class,'getLoginChartSalesData']);
+    Route::get('support-chart',[AuthController::class,'getLoginChartSupportData']);
     Route::get('/users',[AuthController::class,'getAllUsers']);
     Route::post('/logout',[AuthController::class,'logout']);
     Route::put('/users/{id}',[AuthController::class,'update']);
