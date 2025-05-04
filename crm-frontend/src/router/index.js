@@ -18,7 +18,7 @@ const routes = [
   ] },
   { path: '/login-chart', component: LoginChart, meta: { requiresAuth: true } },
   { path: '/admin-chart', component: AdminChart, meta: { requiresAuth: true,role:'Admin'} },
-  { path: '/sales-manager-chart', component: SalesChart, meta: { requiresAuth: true} },
+  { path: '/sales-manager-chart', component: SalesChart, meta: { requiresAuth: true,role:'Sales Manager'} },
 
 ];
 
