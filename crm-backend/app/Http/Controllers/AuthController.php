@@ -113,16 +113,17 @@ class AuthController extends Controller
     }
     public function getLoginChartAdminData(){
         $role='Admin';
-        $startDate =CarBon::now()->subDays(6);
+        $startDate =Carbon::now()->subDays(6);
         $endDate=Carbon::now();
-        $logins=LoginLog::selectRaw('created_at ad date,COUNT(*) as count')
+        $logins=LoginLog::selectRaw('DATE(created_at) as date,COUNT(*) as count')
         ->whereBetween('created_at',[$startDate,$endDate])
         ->whereHas('user.roles', function($query) use ($role){
-            $query->where('name',$role)
+            $query->where('name',$role);
+        
+        })
         ->groupBy('date')
         ->orderBy('date')
         ->pluck('count','date');
-        });
         $dateRange = new Collection();
         for ($date = $startDate; $date <= $endDate; $date->addDay()) {
         $formatted = $date->format('Y-m-d');
