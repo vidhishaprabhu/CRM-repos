@@ -43,11 +43,11 @@ export default {
         const role = response.data.role;
         localStorage.setItem('user-role', role);
         if (role === "Admin") {
-          this.$router.push('/admin-dashboard');
+          this.$router.push('/admin');
         } else if (role === "Sales Manager") {
-          this.$router.push('/sales-dashboard');
+          this.$router.push('/sales');
         } else if (role === "Support") {
-          this.$router.push('/support-dashboard');
+          this.$router.push('/support');
         }
         alert("Login was Successfull Done");
 
