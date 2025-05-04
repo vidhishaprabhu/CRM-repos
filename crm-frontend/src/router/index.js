@@ -8,6 +8,7 @@ import Dashboard from '../components/Dashboard.vue';
 import LoginChart from '../components/LoginChart.vue';
 import AdminChart from '../components/AdminChart.vue';
 import SalesChart from '../components/SalesChart.vue';
+import SupportChart from '../components/SupportChart.vue';
 const routes = [
   { path: '/register', component: Register },
   { path: '/login', component: Login },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/login-chart', component: LoginChart, meta: { requiresAuth: true } },
   { path: '/admin-chart', component: AdminChart, meta: { requiresAuth: true,role:'Admin'} },
   { path: '/sales-manager-chart', component: SalesChart, meta: { requiresAuth: true,role:'Sales Manager'} },
+  { path: '/support-chart', component: SupportChart, meta: { requiresAuth: true,role:'Support'} },
 
 ];
 
