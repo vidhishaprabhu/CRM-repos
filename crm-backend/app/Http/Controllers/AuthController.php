@@ -135,4 +135,28 @@ class AuthController extends Controller
             'data' => $dateRange->values()
         ]);
     }
+    public function getLoginChartSalesData(){
+        $role='Sales Manager';
+        $startDate =Carbon::now()->subDays(6);
+        $endDate=Carbon::now();
+        $logins=LoginLog::selectRaw('DATE(created_at) as date,COUNT(*) as count')
+        ->whereBetween('created_at',[$startDate,$endDate])
+        ->whereHas('user.roles', function($query) use ($role){
+            $query->where('name',$role);
+        
+        })
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('count','date');
+        $dateRange = new Collection();
+        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+        $formatted = $date->format('Y-m-d');
+        $dateRange->put($formatted, $logins->get($formatted, 0));
+        }
+
+        return response()->json([
+            'labels' => $dateRange->keys(),
+            'data' => $dateRange->values()
+        ]);
+    }
 }
