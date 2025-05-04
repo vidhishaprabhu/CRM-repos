@@ -31,8 +31,15 @@
           </ul>
         </div>
         <li class="nav-item">
+          <router-link class="nav-link text-light fw-bolder" to="/admin-chart">Admin-Chart</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link text-light fw-bolder" to="/sales-manager-chart">Sales-Manager-Chart</router-link>
+        </li>
+        <li class="nav-item">
           <button @click="logout" class="btn btn-danger fw-bolder">Logout</button>
         </li>
+        
       </ul>
     </div>
   </div>
