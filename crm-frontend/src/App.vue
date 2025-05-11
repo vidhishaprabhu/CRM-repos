@@ -25,9 +25,6 @@
             <li>
               <router-link class="dropdown-item" to="/support">Support</router-link>
             </li>
-            <li>
-              <router-link class="dropdown-item" to="/login-chart">Login-Chart</router-link>
-            </li>
           </ul>
         </div>
         <div class="dropdown">
