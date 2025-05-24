@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeadController;
+use App\Http\Controllers\PipelineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +32,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/users/{id}',[AuthController::class,'update']);
     Route::delete('/users/{id}',[AuthController::class,'delete']);
     
+    
 });
+Route::post('/pipeline',[PipelineController::class,'store']);
+Route::post('/lead',[LeadController::class,'store']);
