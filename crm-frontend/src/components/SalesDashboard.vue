@@ -23,6 +23,17 @@
               <PlusOutlined style="color:white;"/> New Leads
             </button>
           </router-link>
+          <div class="nav-tabs-custom">
+    <router-link
+      v-for="tab in tabs"
+      :key="tab.name"
+      :to="tab.route"
+      class="tab-link"
+      :class="{ active: $route.path === tab.route }"
+    >
+      {{ tab.name }}
+    </router-link>
+  </div>
         </div>
       </div>
     </div>
@@ -39,6 +50,12 @@ import { PlusOutlined,HomeOutlined } from '@ant-design/icons-vue';
 export default {
   data() {
     return {
+      tabs: [
+        { name: 'All Sales Pipelines', route: '' },
+        { name: 'Reports', route: '' },
+        { name: 'Forms', route: '' },
+        { name: 'All leads', route: '' },
+      ],
       name: '',
       email: '',
       loggedInUser: null,
@@ -73,8 +90,33 @@ export default {
 .center-btn {
   display: flex;
   justify-content: center;
-  align-items: center; /* Optional: centers vertically if container has height */
+  align-items: center; 
   width: 100%;
-  margin: 20px 0; /* Optional: space above/below */
+  margin: 20px 0; 
+}
+.nav-tabs-custom {
+  display: flex;
+  gap: 2rem; 
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+  margin-top:2vw;
+}
+
+.tab-link {
+  text-decoration: none;
+  color: #333;
+  padding-bottom: 5px;
+  position: relative;
+  font-weight: 500;
+}
+
+.tab-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: purple;
 }
 </style>
