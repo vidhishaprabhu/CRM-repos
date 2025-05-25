@@ -4,23 +4,26 @@ import Login from '../components/Login.vue';
 import AdminDashboard from '../components/AdminDashboard.vue';
 import SalesDashboard from '../components/SalesDashboard.vue';
 import SupportDashboard from '../components/SupportDashboard.vue';
-import Dashboard from '../components/Dashboard.vue';
 import LoginChart from '../components/LoginChart.vue';
 import AdminChart from '../components/AdminChart.vue';
 import SalesChart from '../components/SalesChart.vue';
 import SupportChart from '../components/SupportChart.vue';
+import AddSalesPipeline from '../components/AddSalesPipeline.vue';
+import LeadForm from '../components/LeadForm.vue';
+
 const routes = [
   { path: '/register', component: Register },
   { path: '/login', component: Login },
-  { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true }, children: [
+  
     { path: '/admin', component: AdminDashboard, meta: { requiresAuth: true, role: 'Admin' } },
     { path: '/sales', component: SalesDashboard, meta: { requiresAuth: true, role: 'Sales Manager' } },
     { path: '/support', component: SupportDashboard, meta: { requiresAuth: true, role: 'Support' } },
-  ] },
   { path: '/login-chart', component: LoginChart, meta: { requiresAuth: true } },
   { path: '/admin-chart', component: AdminChart, meta: { requiresAuth: true,role:'Admin'} },
   { path: '/sales-manager-chart', component: SalesChart, meta: { requiresAuth: true,role:'Sales Manager'} },
   { path: '/support-chart', component: SupportChart, meta: { requiresAuth: true,role:'Support'} },
+  { path: '/add-sales-pipeline', component: AddSalesPipeline, meta: { requiresAuth: true, role: 'Sales Manager' } },
+  { path: '/add-leads',component:LeadForm,meta:{requiresAuth: true, role: 'Sales Manager'}},
 
 ];
 
