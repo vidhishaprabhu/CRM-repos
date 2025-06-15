@@ -48,23 +48,23 @@
       <CheckOutlined v-if="markstepsone" class="ms-2" style="background-color: #28a745; color: white; border-radius: 50%; padding: 6px; font-size: 16px;" />
     </div>
     <div class="form-check form-switch mt-3">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="showFullName">
       <label class="form-check-label" for="flexSwitchCheckDefault">Full Name</label>
     </div>
     <div class="form-check form-switch mt-3">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="showEmail">
       <label class="form-check-label" for="flexSwitchCheckDefault">Email</label>
     </div>
     <div class="form-check form-switch mt-3">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="showPhone">
       <label class="form-check-label" for="flexSwitchCheckDefault">Phone Number</label>
     </div>
     <div class="form-check form-switch mt-3">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="showOrg">
       <label class="form-check-label" for="flexSwitchCheckDefault">Organisation Name</label>
     </div>
     <div class="form-check form-switch mt-3">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="showMsg">
       <label class="form-check-label" for="flexSwitchCheckDefault">Message</label>
     </div>
     <div class="mt-4">
@@ -147,20 +147,31 @@
 <div class="mt-5 text-center">
   <p style="font-weight:700">Preview</p>
   <div class="p-3 rounded" style="background-color: #f8f9fa;">
-    <label style="font-weight:700">Full Name <span style="color:red">*</span></label>
-    <input type="text" class="form-control" placeholder="Enter Full Name" required>
-    <label style="font-weight:700">Email <span style="color:red">*</span></label>
-    <input type="email" class="form-control" placeholder="Enter Email" required>
-    <label style="font-weight:700">Phone Number <span style="color:red">*</span></label>
-    <input type="number" class="form-control" placeholder="Enter Phone Number" required>
-    <label style="font-weight:700">Organisation Name <span style="color:red">*</span></label>
-    <input type="text" class="form-control" placeholder="Enter Organisation Name" required>
-    <label style="font-weight:700">Message <span style="color:red">*</span></label>
+    <div v-if="showFullName">
+      <label style="font-weight:700">Full Name <span style="color:red" >*</span></label>
+      <input type="text" class="form-control" placeholder="Enter Full Name" required >
+    </div>
+    <div v-if="showEmail">
+      <label style="font-weight:700">Email <span style="color:red">*</span></label>
+      <input type="email" class="form-control" placeholder="Enter Email" required>
+    </div>
+    <div v-if="showPhone">
+      <label style="font-weight:700">Phone Number <span style="color:red">*</span></label>
+      <input type="number" class="form-control" placeholder="Enter Phone Number" required>
+    </div>
+    
+   <div v-if="showOrg">
+     <label style="font-weight:700">Organisation Name <span style="color:red">*</span></label>
+     <input type="text" class="form-control" placeholder="Enter Organisation Name" required>
+   </div>
+   <div v-if="showMsg">
+     <label style="font-weight:700">Message <span style="color:red">*</span></label>
     <textarea
       id="messages"
       class="form-control"
       rows="6"
     ></textarea>
+   </div>
     <button type="submit" class="btn btn-primary mt-4">Submit</button>
     <p class="mt-4">Powered By <strong>PulseCRM</strong></p>
   </div>
@@ -187,6 +198,11 @@ export default {
   },
   data() {
     return {
+      showFullName: false,
+      showEmail:false,
+      showPhone:false,
+      showOrg:false,
+      showMsg:false,
       messageText:"Thank you for your submission!",
       current: 1,
       selectedPipeline: "",
