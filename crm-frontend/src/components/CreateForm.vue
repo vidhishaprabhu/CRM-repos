@@ -5,28 +5,35 @@
       <nav aria-label="breadcrumb" class="mb-1">
         <ol class="breadcrumb mb-0">
           <li class="breadcrumb-item">
-            <router-link to="/main-dashboard">Dashboard</router-link>
+            <router-link to="/main-dashboard" style="color:red;font-weight:700">Dashboard</router-link>
           </li>
           <li class="breadcrumb-item">
-            <router-link to="/form-dashboard">All Forms</router-link>
+            <router-link to="/form-dashboard" style="color:red;font-weight:700">All Forms</router-link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            <router-link to="/create-form">Create Form</router-link>
+            <router-link to="/create-form" style="color:red;font-weight:700">Create Form</router-link>
           </li>
         </ol>
       </nav>
-      <h4 class="mb-0">Create Form</h4>
+      <h4 class="mb-2 text-primary fw-bolder">Create Form</h4>
     </div>
-    <button class="btn btn-primary" disabled>
+    <button class="btn btn-primary" :disabled="!markstepstwo || isPublished" @click="publishForm">
       <CheckOutlined class="me-1" />
       Publish Form
     </button>
+    <div v-if="isPublished" class="mt-3">
+  <p class="fw-bold text-success">Form Published Successfully!</p>
+  <p>You can share this link:</p>
+  <input type="text" class="form-control" :value="generatedFormLink" readonly />
+  <a :href="generatedFormLink" class="btn btn-outline-primary mt-2" target="_blank">Open Form</a>
+</div>
+
   </div>
 </a-card>
 <a-card v-if="current === 1" class="mt-8">
   <div class="p-3 rounded" style="background-color: #f8f9fa;">
-    <p class="mb-3" style="font-size:130%;font-weight:700">1. Select Sales Pipeline</p>
-    <label style="font-weight:700">Select Sales Pipeline <span style="color:red">*</span></label>
+    <p class="mb-3 text-primary fw-bolder" style="font-size:130%;font-weight:700">1. Select Sales Pipeline</p>
+    <label style="font-weight:700" class="text-primary">Select Sales Pipeline <span style="color:red">*</span></label>
     <CheckOutlined v-if="marksteps" class="ms-2" style="background-color: #28a745; color: white; border-radius: 50%; padding: 6px; font-size: 16px;" />
 
     <select class="form-select" v-model="selectedPipeline" required>
@@ -43,7 +50,7 @@
 <a-card v-if="current === 2" class="mt-3" style="background-color: #f8f9fa;">
   <div class="p-3 rounded mt-4" style="background-color: #f8f9fa;">
     <div class="d-flex align-items-center gap-2 ">
-      <p style="font-size:130%;font-weight:700">2. Select Fields</p>
+      <p style="font-size:130%;font-weight:700" class="text-primary">2. Select Fields</p>
       <CheckOutlined v-if="markstepsone" class="ms-2" style="background-color: #28a745; color: white; border-radius: 50%; padding: 6px; font-size: 16px;" />
     </div>
     <div class="form-check form-switch mt-3">
@@ -118,10 +125,13 @@
   </div>
 
 </a-card>
-<a-card v-if="current === 3" class="mt-3">
-  <p style="font-size:130%;font-weight:700">3. Configure Form</p>
-  <div class="p-4 border rounded" style="max-width: 400px;">
-    <label for="logoInput" class="form-label fw-bold">1. Add Business Logo</label>
+<a-card v-if="current === 3" class="mt-3" style="background-color:red">
+  <div class="d-flex align-items-center gap-2 ">
+      <p style="font-size:130%;font-weight:700" class="text-primary">3. Configure Form</p>
+      <CheckOutlined v-if="markstepstwo" class="ms-2" style="background-color: #28a745; color: white; border-radius: 50%; padding: 6px; font-size: 16px;" />
+    </div>
+  <div class="p-4 border rounded" style="max-width: 400px;background-color:pink">
+    <label for="logoInput" class="form-label fw-bold text-primary">1. Add Business Logo</label>
 
     <input type="file" ref="logoInput" id="logoInput" class="form-control" accept="image/*" @change="handleLogoUpload" />
 
@@ -133,23 +143,23 @@
       <div v-if="errors.logo" class="text-danger mt-1">{{ errors.logo }}</div>
     </div>
     <div class="mt-3">
-      <label style="font-weight:700">2. Form Title <span style="color:red">*</span></label>
+      <label style="font-weight:700;" class="text-primary">2. Form Title <span style="color:red">*</span></label>
       <input type="text" class="form-control" placeholder="Enter Form Title" required v-model="showFormTitle">
       <div v-if="errors.title" class="text-danger mt-1">{{ errors.title }}</div>
     </div>
     <div class="mt-3">
-      <label style="font-weight:700">3. Add Form Description <span style="color:red">*</span></label>
+      <label style="font-weight:700;" class="text-primary">3. Add Form Description <span style="color:red">*</span></label>
       <textarea id="message" class="form-control" rows="6" v-model="formDescription"></textarea>
       <div v-if="errors.description" class="text-danger mt-1">{{ errors.description }}</div>
 
     </div>
     <div class="mt-3">
-      <label style="font-weight:700">4. Form Name <span style="color:red">*</span></label>
+      <label style="font-weight:700;" class="text-primary">4. Form Name <span style="color:red">*</span></label>
       <input type="text" class="form-control" placeholder="Enter Form Name" required v-model="formName">
       <div v-if="errors.formName" class="text-danger mt-1">{{ errors.formName }}</div>
     </div>
     <div class="mt-3">
-      <label style="font-weight:700">5. Submit Message <span style="color:red">*</span></label>
+      <label style="font-weight:700;" class="text-primary">5. Submit Message <span style="color:red">*</span></label>
       <textarea ref="submitMessage" id="messages" class="form-control" v-model="messageText" rows="6"></textarea>
       <div v-if="errors.submitMessage" class="text-danger mt-1">{{ errors.submitMessage }}</div>
       <div class="mt-3 d-flex justify-content-center">
@@ -161,11 +171,19 @@
 </a-card>
 
 <div class="d-flex gap-3 mt-5">
-  <button class="btn btn-primary" @click="nextStep" :disabled="current === 3">Next</button>
+  <button 
+  class="btn btn-primary" 
+  @click="nextStep" 
+  :disabled="current === 3 || !marksteps"
+>
+  Next
+</button>
+
+
   <button class="btn btn-primary" @click="prevStep" :disabled="current === 1">Previous</button>
 </div>
 <div class="mt-5 text-center">
-  <p style="font-weight:700">Preview</p>
+  <p style="font-weight:700;font-size:200%" class="text-primary">Preview</p>
   <div class="p-3 rounded" style="background-color: #f8f9fa;">
     <div
   v-if="
@@ -265,12 +283,15 @@
 </div>
 
     <button type="submit" class="btn btn-primary mt-4">Submit</button>
-    <p class="mt-4">Powered By <strong>PulseCRM</strong></p>
+    <p class="mt-4 text-primary">Powered By <strong>PulseCRM</strong></p>
   </div>
 </div>
+
 </template>
 
+
 <script>
+import axios from 'axios';
 import {
   Button,
   Modal,
@@ -309,6 +330,7 @@ export default {
   },
   data() {
     return {
+      isPublished:false,
       showFormTitle: '',
       formDescription: '',
       formName: '',
@@ -338,11 +360,44 @@ export default {
       marksteps: false,
       errorMessage: {},
       markstepsone: false,
+      markstepstwo:false,
       logoFile: null,
       logoPreview: null,
     };
   },
   methods: {
+    async publishForm() {
+  try {
+    const formPayload = {
+      title: this.showFormTitle,
+      description: this.formDescription,
+      name: this.formName,
+      submitMessage: this.messageText,
+      logo: this.logoPreview,
+      fields: {
+        fullName: this.showFullName,
+        email: this.showEmail,
+        phone: this.showPhone,
+        org: this.showOrg,
+        message: this.showMsg,
+        customFields: this.customFields
+      }
+    };
+
+    const response = await axios.post('http://127.0.0.1:8000/api/create-form', formPayload);
+
+    console.log("response", response); // for debug
+
+    const formId = response.data.id;
+    this.generatedFormLink = `${window.location.origin}/form/${formId}`;
+    this.isPublished = true;
+
+    alert("Form Published Successfully!");
+  } catch (error) {
+    console.error("Error publishing form:", error);
+    alert("Failed to publish the form. Please try again.");
+  }
+},
     validateForm() {
     let isValid = true;
 
@@ -381,7 +436,7 @@ export default {
     }
 
     if (isValid) {
-      // Continue form submission logic
+      this.markstepstwo = true;
       alert('Form is valid! You can proceed.');
     }
   },
@@ -438,6 +493,19 @@ export default {
       this.nextStep();
 
     },
+    markthesteptwo() {
+      // if (!this.selectedPipeline) {
+      //   this.errorMessage.deal_title = 'Please select a sales pipeline.';
+      //   this.marksteps = false; 
+      // } else {
+      //   this.errorMessage.deal_title = '';  
+      //   this.marksteps = true;
+      //   this.nextStep();
+      // }
+      this.markstepstwo = true;
+      this.nextStep();
+
+    },
     handleLogoUpload(event) {
       const file = event.target.files[0];
       if (file && file.type.startsWith("image/")) {
@@ -480,3 +548,12 @@ export default {
 
 }
 </script>
+<style scoped>
+::v-deep(.ant-card) {
+  border: 2px solid red;
+}
+.red-border-card {
+  border: 2px solid red;
+}
+
+</style>
