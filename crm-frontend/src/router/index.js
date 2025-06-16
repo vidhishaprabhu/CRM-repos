@@ -12,6 +12,8 @@ import AddSalesPipeline from '../components/AddSalesPipeline.vue';
 import LeadForm from '../components/LeadForm.vue';
 import MainDashboard from '../components/MainDashboard.vue';
 import FormDashboard from '../components/FormDashboard.vue';
+import CreateForm from '../components/CreateForm.vue';
+
 const routes = [
   { path: '/register', component: Register },
   { path: '/login', component: Login },
@@ -26,6 +28,12 @@ const routes = [
   { path: '/add-sales-pipeline', component: AddSalesPipeline, meta: { requiresAuth: true, role: 'Sales Manager' } },
   { path: '/add-leads',component:LeadForm,meta:{requiresAuth: true, role: 'Sales Manager'}},
   { path: '/form-dashboard', component: FormDashboard, meta: { requiresAuth: true, role: 'Sales Manager' } },
+  { path: '/create-form', component: CreateForm, meta: { requiresAuth: true, role: 'Sales Manager' } },
+  {
+  path: '/form/:id',
+  name: 'form-view',
+  component: () => import('@/components/FormView.vue')
+}
 
 ];
 
