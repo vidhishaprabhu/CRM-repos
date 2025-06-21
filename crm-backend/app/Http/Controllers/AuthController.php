@@ -10,16 +10,43 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     public function register(Request $request){
-        $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|min:6'
-        ]);
+        $validator = Validator::make($request->all(), [
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'password' => 'required|min:6',
+    ]);
+
+    // if ($validator->fails()) {
+    //     return response()->json([
+    //         'errors' => $validator->errors()
+    //     ], 422);
+    // }
+
+    // 🔍 Check manually if email already exists (Equality Check)
+    $existingUser = User::where('email', $request->email)->first();
+    $existingName = User:: where('name', $request->name)->first();
+    $existingPassword = User::where('password',$request->password)->first();
+    if ($existingUser) {
+        return response()->json([
+            'errors' => ['email' => ['This email is already registered.']]
+        ], 422);
+    }
+    if($existingName){
+         return response()->json([
+            'errors' => ['name' => ['This name is already registered.']]
+        ], 422);       
+    }
+    // if($existingPassword){
+    //      return response()->json([
+    //         'errors' => ['password' => ['This password is already registered.']]
+    //     ], 422);       
+    // }
         $user=User::create([
             'name'=>$request->name,
             'email'=>$request->email,
