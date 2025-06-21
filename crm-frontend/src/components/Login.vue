@@ -15,10 +15,11 @@
           <p v-if="error" class="text-danger mt-5">{{error}}</p>
         </form>
       </div>
-
+<p style="text-align:center;margin-top:3vw;font-weight:700;font-size:120%">Don't have an account. Click here for <router-link to="/register" style="font-weight:700;color:red">Register</router-link></p>
     </div>
   </div>
 </div>
+
 </template>
 
 <script>
