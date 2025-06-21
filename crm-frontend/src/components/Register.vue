@@ -34,6 +34,7 @@
             <p v-else-if="message" class="text-success mt-5">{{message}}</p>
           </form>
         </div>
+        <p style="text-align:center;margin-top:3vw;font-weight:700;font-size:120%">Already Have an account ?. Click here for <router-link to="/login" style="color:red;font-weight:700;">Login</router-link></p>
       </div>
     </div>
   </div>
@@ -55,23 +56,47 @@ export default {
   },
   methods: {
     async register() {
-      try {
-        const response = await api.post('/register', {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
-        this.error='';
-        this.message="Registration was Successfully done !!";
-        this.$router.push('/login');
+  try {
+    const response = await api.post('/register', {
+      name: this.name,
+      email: this.email,
+      password: this.password,
+    });
 
-      } catch (error) {
-        this.error = 'Registration Failed !!. Please Try Again.'
+    this.error = '';
+    this.message = "Registration was Successfully done !!";
 
+    // Optional: Delay or confirm before redirect
+    setTimeout(() => {
+      this.$router.push('/login');
+    }, 1000);
+
+  } catch (error) {
+    // Handle Laravel validation errors (status code 422)
+    if (error.response && error.response.status === 422) {
+      const errors = error.response.data.errors;
+
+      // Check if email validation failed
+      if (errors.email) {
+        this.error = errors.email[0];
+      } else if (errors.name) {
+        this.error = errors.name[0];
+      } else if (errors.password) {
+        this.error = errors.password[0];
+      } else {
+        this.error = 'Validation failed. Please check your inputs.';
       }
+
+    } else {
+      // Generic error
+      this.error = 'Registration Failed !!. Please Try Again.';
     }
+  }
+}
+
   }
 
 }
 </script>
+
 
